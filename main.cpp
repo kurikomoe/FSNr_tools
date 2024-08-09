@@ -24,7 +24,7 @@ char* SomeKey = nullptr;
 int main(int argc, char** argv) {
     fs::path p(argv[1]);
 
-    auto base = fs::absolute(argv[0]);
+    auto base = fs::absolute(argv[0]).parent_path();
 
     auto input_file = p.root_path();
     std::string filename = p.filename().string();
