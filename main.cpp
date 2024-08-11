@@ -82,11 +82,11 @@ int main(int argc, char** argv) {
     file.seekg(0,std::ios_base::end);
     size_t size = file.tellg();
 
-    auto* buf = new char[size*2];
+    uint8_t* buf = new uint8_t[size*2];
     memset(buf, 0, size * sizeof(char));
 
     file.seekg(0,std::ios_base::beg);
-    file.read(buf, size);
+    file.read((char*)buf, size);
 
     auto* a1 = new char[0x1000];
 
@@ -102,18 +102,41 @@ int main(int argc, char** argv) {
         }
     */
     if (is_dec) {
-        DecEncEPK(a1, buf, size - 0x30, dec_func);
+        size = (buf[size-0x20] << 24) | (buf[size-0x20+1] << 16) | (buf[size-0x20+2] << 8) | (buf[size-0x20+3]);
+        printf("raw size: %x\n", size);
+
+        DecEncEPK(a1, (char*)buf, size, dec_func);
     } else {
-        DecEncEPK(a1, buf, size - 0x30, enc_func);
+        DecEncEPK(a1, (char*)buf, size, enc_func);
+        printf("raw size: %x\n", size);
+
+        // Round up
+        uint64_t raw_size = size;
+        if (size % 4 != 0) {
+            size = (size + 3) / 4 * 4;
+        }
+        uint64_t padding_size = size;
+        printf("padding size: %x\n", padding_size);
+
+        size += 0x10;
+
+        buf[size + 0] = BYTE3(raw_size);
+        buf[size + 1] = BYTE2(raw_size);
+        buf[size + 2] = BYTE1(raw_size);
+        buf[size + 3] = BYTE0(raw_size);
+
+        size += 0x10;
 
         Chocobo1::MD5 md5;
-        md5.addData(buf, size - 0x30);
+        md5.addData(buf, padding_size);
         md5.addData(MAGIC_KEY, strlen(MAGIC_KEY) * sizeof(char));
         md5.finalize();
 
         auto md5_data = md5.toArray();
 
-        memcpy(buf + size - 0x10, md5_data.data(), 0x10);
+        memcpy(buf + size, md5_data.data(), 0x10);
+
+        size += 0x10;
     }
 
     auto out_p = p.replace_extension(is_dec ? ".epk_dec" : ".epk_enc");
@@ -121,7 +144,7 @@ int main(int argc, char** argv) {
     std::cout << "output: " << out_p << std::endl;
 
     std::fstream fout(out_p, std::ios::binary | std::ios::out);
-    fout.write(buf, size);
+    fout.write((char*)buf, size);
 
     std::cout << "done" << std::endl;
 
