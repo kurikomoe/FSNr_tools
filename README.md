@@ -23,7 +23,7 @@ struct EPK {
   char* varibleLengthBuf;
   char   paddingZero[0x10];
   dword  bufSize;         // variableLengthBuf size (padding to dword), big endian
-  char paddingZero[0xF]
+  char paddingZero[0x10-sizeof(dword)]
   char md5[0x10];         // Auto calculate when enc in main.exe, calc based on bufSize
 }
 ```
