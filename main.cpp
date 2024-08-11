@@ -93,15 +93,20 @@ int main(int argc, char** argv) {
     std::cout << "start decrypt" << std::endl;
     sub_1404C80B0((_DWORD*)a1, (__int64)key.c_str(), (int)index);
 
-    // NOTE(kuriko): 
+    // NOTE(kuriko):
     /*
         struct EPK, see in readme
     */
     if (is_dec) {
-        size = (buf[size-0x20] << 24) | (buf[size-0x20+1] << 16) | (buf[size-0x20+2] << 8) | (buf[size-0x20+3]);
+        // NOTE(kuriko): this is a trick to avoid boundary problem
+        // first we decode the whole buffer, then we shrink it to size specific in epk
+        printf("file size: %x\n", size);
+        DecEncEPK(a1, (char*)buf, size - 0x20, dec_func);
+        size = (buf[size-0x20+0] << 24)
+             | (buf[size-0x20+1] << 16)
+             | (buf[size-0x20+2] << 8)
+             | buf[size-0x20+3];
         printf("raw size: %x\n", size);
-
-        DecEncEPK(a1, (char*)buf, size, dec_func);
     } else {
         DecEncEPK(a1, (char*)buf, size, enc_func);
         printf("raw size: %x\n", size);
