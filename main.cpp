@@ -6,29 +6,48 @@
 #include <filesystem>
 #include <format>
 
-namespace fs = std::filesystem;
 
-#include "init.h"
-// #include "decepk.h"
-#include "try_dec.h"
-#include "strangefunc1.h"
-#include "strangefunc2.h"
+#include "include/initkey.h"
+#include "include/decenc.h"
+#include "include/strangefunc1.h"
+
+#include "include/md5.h"
+
+namespace fs = std::filesystem;
 
 char* SomeKey = nullptr;
 
-// const char* filename = "root_data_locale_ck_epk_uistring.epk";
-// char key2[] = "uistring";
-
-// char* filename = "root_data_epk_0a5ke8hlsh37k6prc4qt8o06v1.epk";
+const char* MAGIC_KEY = "8FE9D249BD2689BB4B70F5AE88A9E645";
 
 
 int main(int argc, char** argv) {
-    fs::path p(argv[1]);
+    if (argc != 3) {
+        puts("Usage: ");
+        puts("./main.exe dec [path_to_epk] ");
+        puts("./main.exe enc [path_to_dec_epk] ");
+        exit(-1);
+    }
+
+    bool is_dec = true;
+    if (strcmp(argv[1], "enc") == 0) {
+        is_dec = false;
+    }
+
+    fs::path p(argv[2]);
 
     auto base = fs::absolute(argv[0]).parent_path();
 
-    auto input_file = p.root_path();
     std::string filename = p.filename().string();
+
+    if (is_dec && p.extension() != ".epk") {
+        std::cout << "[dec] input file should be .epk";
+        exit(-1);
+    }
+
+    if (!is_dec && p.extension() != ".epk_dec") {
+        std::cout << "[enc] input file should be .epk_dec";
+        exit(-1);
+    }
 
     std::string real_filename;
     for (int i = filename.length() - 1; i >= 0; --i) {
@@ -42,25 +61,27 @@ int main(int argc, char** argv) {
         real_filename = filename;
     }
 
-    std::string key2 = fs::path(real_filename).filename().stem().string();
-    int index = key2.length();
+    std::string key = fs::path(real_filename).filename().stem().string();
+    int index = key.length();
 
-    std::cout << std::format("filename: {}\nreal_filename: {}\nkey2: {}\nlen: {}\n", filename, real_filename, key2, index);
+    std::cout << std::format("filename: {}\nreal_filename: {}\nkey: {}, len: {}\n", filename, real_filename, key, index);
 
-    std::fstream key(base / "SomeKey.bin", std::ios::binary | std::ios::in);
+    std::fstream key_file(base / "SomeKey.bin", std::ios::binary | std::ios::in);
 
-    key.seekg(0,std::ios_base::end);
-    auto key_size = key.tellg();
+    key_file.seekg(0,std::ios_base::end);
+    auto key_size = key_file.tellg();
+
     SomeKey = new char[key_size * 2];
     memset(SomeKey, 0, key_size * sizeof(char));
 
-    key.seekg(0,std::ios_base::beg);
-    key.read(SomeKey, key_size);
+    key_file.seekg(0,std::ios_base::beg);
+    key_file.read(SomeKey, key_size);
 
     std::fstream file(p, std::ios::binary | std::ios::in);
 
     file.seekg(0,std::ios_base::end);
-    auto size = file.tellg();
+    size_t size = file.tellg();
+
     auto* buf = new char[size*2];
     memset(buf, 0, size * sizeof(char));
 
@@ -70,16 +91,33 @@ int main(int argc, char** argv) {
     auto* a1 = new char[0x1000];
 
     std::cout << "start decrypt" << std::endl;
-    sub_1404C80B0((_DWORD*)a1, (__int64)key2.c_str(), (int)index);
+    sub_1404C80B0((_DWORD*)a1, (__int64)key.c_str(), (int)index);
 
-    // auto ret = DecEPK((__int64)a1, (__int64)buf, size, func_7e90);
-    auto ret = DecEPK2(a1, buf, size, func_7e90);
+    // NOTE(kuriko): 0x30 is flags + md5
+    /*
+        struct EPK {
+            char* varibleLengthBuf;
+            char  flags[0x20];
+            char  md5[0x10];
+        }
+    */
+    if (is_dec) {
+        DecEncEPK(a1, buf, size - 0x30, dec_func);
+    } else {
+        DecEncEPK(a1, buf, size - 0x30, enc_func);
 
-    // debug output
-    // std::string ss(buf, buf+size);
-    // std::cout << ss << std::endl;
+        Chocobo1::MD5 md5;
+        md5.addData(buf, size - 0x30);
+        md5.addData(MAGIC_KEY, strlen(MAGIC_KEY) * sizeof(char));
+        md5.finalize();
 
-    auto out_p = p.replace_extension(".epk_dec");
+        auto md5_data = md5.toArray();
+
+        memcpy(buf + size - 0x10, md5_data.data(), 0x10);
+    }
+
+    auto out_p = p.replace_extension(is_dec ? ".epk_dec" : ".epk_enc");
+
     std::cout << "output: " << out_p << std::endl;
 
     std::fstream fout(out_p, std::ios::binary | std::ios::out);

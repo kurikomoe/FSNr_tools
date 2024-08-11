@@ -6,7 +6,7 @@ int64_t CALC(_DWORD *buf, int i) {
     return buf[BYTE0(i) + 30] ^ buf[BYTE1(i) + 26] ^ (buf[BYTE2(i) + 22] + buf[BYTE3(i) + 18]);
 }
 
-void __fastcall func_7e90(_DWORD *a1, int *a2, int *a3) {
+void __fastcall dec_func(_DWORD *a1, int *a2, int *a3) {
     unsigned int v2;
     unsigned int v3;
     unsigned int v4;
@@ -54,7 +54,7 @@ void __fastcall func_7e90(_DWORD *a1, int *a2, int *a3) {
 
 }
 
-void __fastcall try_enc(_DWORD *a1, int *a2, int *a3) {
+void __fastcall enc_func(_DWORD *a1, int *a2, int *a3) {
     auto v2 = *a2;
     auto v3 = *a3;
 

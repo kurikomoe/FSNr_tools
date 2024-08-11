@@ -9,23 +9,8 @@
 #include "strangefunc1.h"
 
 
-std::vector<uint8_t> kdec(std::span<const char> key, uint8_t* buf, size_t size) {
-    std::vector<uint8_t> ret;
 
-    auto cnt = size >> 3;
-
-    size_t idx = 0;
-    if (size > 0) {
-        size_t offset = idx * 8;
-        uint8_t* ptr = buf + offset;
-    }
-
-    return ret;
-}
-
-
-
-__int64 __fastcall DecEPK2(
+__int64 __fastcall DecEncEPK(
         char a1[],
         char buf[],
         int size,

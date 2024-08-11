@@ -1,35 +1,28 @@
 # Usage
 > only tested on windows
 
-> remember to put SomeKey.bin along with [enc_]main.exe
-
-> **Work in progress**
+> remember to put SomeKey.bin along with main.exe
 
 ```shell
 g++ --std=c++20 -O2 main.cpp -o main.exe
-g++ --std=c++20 -O2 enc_main.cpp -o enc_main.exe
 
-./main.exe "[path to epk]"
-./enc_main.exe "[path to epk.epk_dec]"
+./main.exe enc "[path to epk]"
+./main.exe dec "[path to epk.epk_dec]"
 
 # example
-# ./main.exe root#data#locale#ck#epk#uistring.epk
+# ./main.exe dec root#data#locale#ck#epk#uistring.epk
 # and find the dec file in the same folder: root#data#locale#ck#epk#uistring.epk_dec
 
-# ./enc_main.exe root#data#locale#ck#epk#uistring.epk_dec
+# ./main.exe enc root#data#locale#ck#epk#uistring.epk_dec
 # and find the enc file in the same folder: root#data#locale#ck#epk#uistring.epk_enc
 ```
 
 ## Note
-<del> **Alert** I still can't figure out what the last 0x30 bytes in dec file means, though encrypt the unmodified epk_dec to epk_enc is identical to the original epk.
-I dont know if the epk is modified, the last 0x30 bytes should change according or not.
-The epk encryption method can be found in `try_dec.h` and `strangefun1.h`, I simplified the original obfs code dumped from ida.</del>
-
 ```
 struct EPK {
   char* varibleLengthBuf;
-  char  flags[0x20];
-  char  md5[0x10];
+  char  flags[0x20];  // Still don't known, just keep it.
+  char  md5[0x10];    // Auto calculate when enc in main.exe
 }
 ```
 the md5 is calculated from buf + "8FE9D249BD2689BB4B70F5AE88A9E645"(ascii char, 32bytes)
