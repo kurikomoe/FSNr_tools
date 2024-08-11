@@ -1,13 +1,13 @@
 # Usage
 > only tested on windows
 
-> remember to put SomeKey.bin along with main.exe
+> remember to put SomeKey.bin along with [enc_]main.exe
 
 > **Work in progress**
 
 ```shell
 g++ --std=c++20 -O2 main.cpp -o main.exe
-g++ --std=c++20 -O2 env_main.cpp -o enc_main.exe
+g++ --std=c++20 -O2 enc_main.cpp -o enc_main.exe
 
 ./main.exe "[path to epk]"
 ./enc_main.exe "[path to epk.epk_dec]"
@@ -17,7 +17,7 @@ g++ --std=c++20 -O2 env_main.cpp -o enc_main.exe
 # and find the dec file in the same folder: root#data#locale#ck#epk#uistring.epk_dec
 
 # ./enc_main.exe root#data#locale#ck#epk#uistring.epk_dec
-# and find the dec file in the same folder: root#data#locale#ck#epk#uistring.epk_enc
+# and find the enc file in the same folder: root#data#locale#ck#epk#uistring.epk_enc
 ```
 
 ## Note
@@ -31,3 +31,7 @@ The epk encryption method can be found in `try_dec.h` and `strangefun1.h`, I sim
 SomeKey.bin dumps from 0x1409E6500
 
 FDT file decrypt script can be found in scripts folder, (but badly written in python)
+
+Someone on steam community successfully repacked the epk with modified content: https://steamcommunity.com/app/2396980/discussions/0/4513255384647123281/
+
+The game load epks from C:\Users\<username>\AppData\Local\typemoon\fsn2\data by default (with subdirs `root/data/locale/ck/epk/uistring.epk` for example), though I dont think creating such patch/mod and delivering to players is a fancy idea XD.
