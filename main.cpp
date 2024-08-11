@@ -93,13 +93,9 @@ int main(int argc, char** argv) {
     std::cout << "start decrypt" << std::endl;
     sub_1404C80B0((_DWORD*)a1, (__int64)key.c_str(), (int)index);
 
-    // NOTE(kuriko): 0x30 is flags + md5
+    // NOTE(kuriko): 
     /*
-        struct EPK {
-            char* varibleLengthBuf;
-            char  flags[0x20];
-            char  md5[0x10];
-        }
+        struct EPK, see in readme
     */
     if (is_dec) {
         size = (buf[size-0x20] << 24) | (buf[size-0x20+1] << 16) | (buf[size-0x20+2] << 8) | (buf[size-0x20+3]);
