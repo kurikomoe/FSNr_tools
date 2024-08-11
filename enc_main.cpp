@@ -9,7 +9,7 @@
 namespace fs = std::filesystem;
 
 #include "init.h"
-// #include "decepk.h"
+#include "decepk.h"
 #include "try_dec.h"
 #include "strangefunc1.h"
 #include "strangefunc2.h"
@@ -69,17 +69,16 @@ int main(int argc, char** argv) {
 
     auto* a1 = new char[0x1000];
 
-    std::cout << "start decrypt" << std::endl;
+    std::cout << "start enc" << std::endl;
     sub_1404C80B0((_DWORD*)a1, (__int64)key2.c_str(), (int)index);
 
-    // auto ret = DecEPK((__int64)a1, (__int64)buf, size, func_7e90);
-    auto ret = DecEPK2(a1, buf, size, func_7e90);
+    auto ret = DecEPK2(a1, buf, size, try_enc);
 
     // debug output
     // std::string ss(buf, buf+size);
     // std::cout << ss << std::endl;
 
-    auto out_p = p.replace_extension(".epk_dec");
+    auto out_p = p.replace_extension(".epk_enc");
     std::cout << "output: " << out_p << std::endl;
 
     std::fstream fout(out_p, std::ios::binary | std::ios::out);

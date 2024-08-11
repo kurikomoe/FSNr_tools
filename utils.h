@@ -2,6 +2,8 @@
 
 #include "defs.h"
 
+#define BYTE0(x) (uint8_t(x))
+
 uint32_t _byteswap_ulong(uint32_t value) {
     return ((value >> 24) & 0x000000FF) | // Move byte 3 to byte 0
            ((value >> 8) & 0x0000FF00) |  // Move byte 2 to byte 1

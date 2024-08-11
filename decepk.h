@@ -6,7 +6,7 @@ __int64 __fastcall DecEPK(
         __int64 a1,
         __int64 buf,
         int someSize,
-        long long (__fastcall *callback)(_DWORD*, int*, int*))
+        void (__fastcall *callback)(_DWORD*, int*, int*))
 {
   unsigned __int64 v4; // rbx
   __int64 v5; // r10
@@ -37,7 +37,7 @@ __int64 __fastcall DecEPK(
   int v31; // [rsp+28h] [rbp-60h]
   int entryCount; // [rsp+2Ch] [rbp-5Ch]
   _BYTE *buf_p3; // [rsp+30h] [rbp-58h]
-  long long (__fastcall *callback_alias)(_DWORD*, int*, int*); // [rsp+A8h] [rbp+20h]
+  void (__fastcall *callback_alias)(_DWORD*, int*, int*); // [rsp+A8h] [rbp+20h]
 
   callback_alias = callback;
   v4 = 0;
