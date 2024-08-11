@@ -22,9 +22,7 @@ g++ --std=c++20 -O2 enc_main.cpp -o enc_main.exe
 
 ## Note
 <del> **Alert** I still can't figure out what the last 0x30 bytes in dec file means, though encrypt the unmodified epk_dec to epk_enc is identical to the original epk.
-
 I dont know if the epk is modified, the last 0x30 bytes should change according or not.
-
 The epk encryption method can be found in `try_dec.h` and `strangefun1.h`, I simplified the original obfs code dumped from ida.</del>
 
 ```
