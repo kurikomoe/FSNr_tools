@@ -108,7 +108,6 @@ int main(int argc, char** argv) {
              | buf[size-0x20+3];
         printf("raw size: %x\n", size);
     } else {
-        DecEncEPK(a1, (char*)buf, size, enc_func);
         printf("raw size: %x\n", size);
 
         // Round up
@@ -118,6 +117,8 @@ int main(int argc, char** argv) {
         }
         uint64_t padding_size = size;
         printf("padding size: %x\n", padding_size);
+
+        DecEncEPK(a1, (char*)buf, padding_size, enc_func);
 
         size += 0x10;
 
