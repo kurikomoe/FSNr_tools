@@ -25,14 +25,14 @@ g++ --std=c++20 -O2 main.cpp -o main.exe
 struct EPK {
   char*  variantLengthBuf;
   char   paddingZero[0x10];
-  dword  bufSize;         // variantLengthBuf size, big endian
-  char paddingZero[0x10-sizeof(dword)]
+  word  bufSize;         // variantLengthBuf size, big endian
+  char paddingZero[0x10-sizeof(word)]
   char md5[0x10];         // Auto calculate when enc in main.exe, calc based on bufSize
 }
 ```
 the md5 is calculated from buf + "8FE9D249BD2689BB4B70F5AE88A9E645"(ascii char, 32bytes)
 
-> the buffer is always zero padded to dword, but bufSize is the actual size, and md5, enc/dec are based on the dword aligned buffer (aka padded size).
+> the buffer is always zero padded to word, but bufSize is the actual size, and md5, enc/dec are based on the dword aligned buffer (aka padded size).
 
 # Tips
 SomeKey.bin dumps from 0x1409E6500
