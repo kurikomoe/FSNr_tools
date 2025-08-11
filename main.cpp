@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
     size_t size = file.tellg();
 
     uint8_t* buf = new uint8_t[size*2];
-    memset(buf, 0, size * sizeof(char));
+    memset(buf, 0, size * sizeof(char) * 2);
 
     file.seekg(0,std::ios_base::beg);
     file.read((char*)buf, size);
