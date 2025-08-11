@@ -101,11 +101,13 @@ int main(int argc, char** argv) {
         // NOTE(kuriko): this is a trick to avoid boundary problem
         // first we decode the whole buffer, then we shrink it to size specific in epk
         printf("file size: %x\n", size);
-        DecEncEPK(a1, (char*)buf, size - 0x20, dec_func);
-        size = (buf[size-0x20+0] << 24)
+        auto real_size = (buf[size-0x20+0] << 24)
              | (buf[size-0x20+1] << 16)
              | (buf[size-0x20+2] << 8)
              | buf[size-0x20+3];
+
+        DecEncEPK(a1, (char*)buf, size - 0x30, dec_func);
+        size = real_size;
         printf("raw size: %x\n", size);
     } else {
         printf("raw size: %x\n", size);
