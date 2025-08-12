@@ -1,13 +1,26 @@
 # Usage
-> only tested on windows
+> [!IMPORTANT]
+> Only tested on windows
+> 
+> Remember to put SomeKey.bin along with main.exe
 
-> remember to put SomeKey.bin along with main.exe
 
+## *.bin
+```shell
+python scripts/dec.py --input pack01d.bin --key_bin decryptKey.bin --output_dir unpack
+```
+
+## files in pack folder
+```shell
+python scripts/unpack.py --input-dir <path_to_pack_folder> --output-dir unpack
+```
+
+## *.epk files unpacked from *.bin
 ```shell
 g++ --std=c++20 -O2 main.cpp -o main.exe
 
-./main.exe enc "[path to epk]"
-./main.exe dec "[path to epk.epk_dec]"
+./main.exe dec "[path to epk]"
+./main.exe enc "[path to epk.epk_dec]"
 
 # example
 # ./main.exe dec root#data#locale#ck#epk#uistring.epk
@@ -35,20 +48,21 @@ the md5 is calculated from buf + "8FE9D249BD2689BB4B70F5AE88A9E645"(ascii char, 
 
 > the buffer is always zero padded to word, but bufSize is the actual size, and md5, enc/dec are based on the word aligned buffer (aka padded size).
 
-# Tips
-SomeKey.bin dumps from 0x1409E6500
-
-FDT file decrypt script can be found in scripts folder, (but badly written in python)
-
-Someone on steam community successfully repacked the epk with modified content: https://steamcommunity.com/app/2396980/discussions/0/4513255384647123281/
-
-The game load epks from C:\Users\<username>\AppData\Local\typemoon\fsn2\data by default (with subdirs `root/data/locale/ck/epk/uistring.epk` for example), though I dont think creating such patch/mod and delivering to players is a fancy idea XD.
-
-
-
-
-> Bonus:
+> [!NOTE]
+> SomeKey.bin dumps from 0x1409E6500
 >
-> The game determin the %LOCALAPPDATA% by env \$env.LOCALAPPDATA, so start the game with modified \$env.LOCALAPPDATA will redirect all things to the desired location, see `FSNr_bonus.7z`
+> FDT file decrypt script can be found in scripts folder, (but badly written in python)
 >
-> So you can ship a mod/patch without hooking or repacking the .bin/.dat
+> Someone on steam community successfully repacked the epk with modified content: https://steamcommunity.com/app/2396980/discussions/0/4513255384647123281/
+>
+> The game load epks from C:\Users\<username>\AppData\Local\typemoon\fsn2\data by default (with subdirs `root/data/locale/ck/epk/uistring.epk` for example), though I dont think creating such patch/mod and delivering to players is a fancy idea XD.
+
+
+> [!TIP]
+>
+> The game determines the %LOCALAPPDATA% by env \$env.LOCALAPPDATA. So starting the game with modified \$env.LOCALAPPDATA will redirect all things to the desired location, see `FSNr_bonus.7z`
+>
+> Then you can ship a mod/patch without hooking or repacking the .bin/.dat.
+
+# Related Projects
+[DaZombieKiller/FatePackageManager](https://github.com/DaZombieKiller/FatePackageManager): They helped me a lot when reversing the package format.
