@@ -5,6 +5,13 @@
 >
 > link: https://github.com/kurikomoe/FSNr_tools/issues/5
 
+# `*.fcd`
+
+Audio files are encrypted/embedded within `.fcd` files.
+
+You can use the script at `scripts/fcd/dec.py` to decrypt them. However, please note that compatibility may vary depending on the game version.
+
+See: https://github.com/kurikomoe/FSNr_tools/issues/7#issuecomment-4218136842
 
 # Usage
 > [!IMPORTANT]
