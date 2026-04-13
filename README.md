@@ -1,10 +1,3 @@
-> [!CAUTION]
-> It appears that FSNr has changed its cipher key.
-> 
-> You may need to find the new key yourself, or roll back the game to its initial release version.
->
-> link: https://github.com/kurikomoe/FSNr_tools/issues/5
-
 # `*.fcd`
 
 Audio files are encrypted/embedded within `.fcd` files.
