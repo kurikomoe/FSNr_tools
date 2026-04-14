@@ -11,6 +11,8 @@ See: https://github.com/kurikomoe/FSNr_tools/issues/7#issuecomment-4218136842
 > Only tested on windows
 > 
 > Remember to put SomeKey.bin along with main.exe
+>
+> Please ensure that the execution path contains only ASCII characters. See https://github.com/kurikomoe/FSNr_tools/issues/5#issuecomment-4238645364
 
 
 ## *.bin
